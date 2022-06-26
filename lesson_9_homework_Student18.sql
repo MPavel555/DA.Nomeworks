@@ -1,34 +1,31 @@
 --task1  (lesson9)
 -- oracle: https://www.hackerrank.com/challenges/the-report/problem
 
-SET @r1=0,@r2=0,@r3=0,@r4=0;
-SELECT MIN(Doctor),MIN(Professor),MIN(Singer),MIN(Actor)
-FROM (
-SELECT CASE
-    WHEN OCCUPATION = 'Doctor' THEN (@r1:=@r1+1)
-    WHEN OCCUPATION = 'Professor' THEN (@r2:=@r2+1)
-    WHEN OCCUPATION = 'Singer' THEN (@r3:=@r3+1)
-    WHEN OCCUPATION = 'Actor' THEN (@r4:=@r4+1) END AS RowNumber,
-    CASE WHEN OCCUPATION = 'Doctor' THEN Name END AS Doctor,
-    CASE WHEN OCCUPATION = 'Professor' THEN Name END AS Professor,
-    CASE WHEN OCCUPATION = 'Singer' THEN Name END AS Singer,
-    CASE WHEN OCCUPATION = 'Actor' THEN Name END AS Actor
-FROM OCCUPATIONS
-ORDER BY Name) as temp
+SELECT 
+    CASE
+        WHEN Grades.Grade > 7 THEN Students.Name
+        WHEN Grades.Grade <= 7 THEN NULL
+        END, Grades.Grade, Students.Marks FROM Students INNER JOIN Grades 
+        ON Students.Marks BETWEEN Grades.Min_Mark AND Max_Mark ORDER BY Grades.Grade DESC, Students.Name ASC, Students.Marks ASC;
 
 
 --task2  (lesson9)
 -- oracle: https://www.hackerrank.com/challenges/occupations/problem
-
-select *,
-case when Occupation = 'Doctor' then 1
-when Occupation = 'Professor' then 2
-when Occupation = 'Singer' then 3
-else 4
-end flag
-from Occupations
-
-
+set @r1=0, @r2=0, @r3=0, @r4=0;
+select min(Doctor), min(Professor), min(Singer), min(Actor)
+from(
+  select case when Occupation='Doctor' then (@r1:=@r1+1)
+            when Occupation='Professor' then (@r2:=@r2+1)
+            when Occupation='Singer' then (@r3:=@r3+1)
+            when Occupation='Actor' then (@r4:=@r4+1) end as RowNumber,
+    case when Occupation='Doctor' then Name end as Doctor,
+    case when Occupation='Professor' then Name end as Professor,
+    case when Occupation='Singer' then Name end as Singer,
+    case when Occupation='Actor' then Name end as Actor
+  from OCCUPATIONS
+  order by Name
+) Temp
+group by RowNumber
 
 
 --task3  (lesson9)
